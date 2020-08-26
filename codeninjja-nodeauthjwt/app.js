@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const app = express();
 const authRoutes = require('./routes/authRoutes.js');
+const cookieParser = require('cookie-parser');
 
 const PORT = process.env.PORT || 3000;
 
@@ -11,7 +12,8 @@ dotenv.config({path: path.resolve(__dirname, 'config.env')});
 // middleware
 app.use(
   express.static('public'),
-  express.json());
+  express.json(),
+  cookieParser());
 // view engine
 app.set('view engine', 'ejs');
 
@@ -36,5 +38,38 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCr
 // routes
 app.get('/', (req, res) => res.render('home'));
 app.get('/smoothies', (req, res) => res.render('smoothies'));
-
 app.use(authRoutes);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//cookies
+app.get('/set-cookies', (req,res)=>{
+
+  //res.setHeader('Set-Cookie', 'newUser=true'); //stays until we close the browser
+  //document.cookie
+
+  res.cookie('newUser', false);
+  res.cookie('isEmployee', true, {maxAge: 1000* 60 * 60 * 24, secure: true, httpOnly: true});
+  res.send('you got the cookies!'); 
+});
+
+app.get('/read-cookies', (req,res)=>{
+  const cookies = req.cookies;
+  console.log(cookies);
+  res.json(cookies);
+
+});
