@@ -79,11 +79,22 @@ function authController() {
         }
     }
 
+    async function logout_get(req,res){
+        res.cookie('jwt', '', {maxAge: 1});
+        res.redirect('/');
+    }
+
+    async function logout_post(req,res){
+
+    }
+
     return ({
         signup_get,
         signup_post,
         login_get,
-        login_post
+        login_post,
+        logout_get,
+        logout_post
     });
 }
 
